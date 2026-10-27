@@ -1,1 +1,13 @@
-{ "type": "module" }
+{
+  "name": "Ayush-kumar-portfolio",
+  "version": "1.0.0",
+  "description": "Personal Portfolio with AI Chatbot Serverless Function",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js"
+  },
+  "keywords": [],
+  "author": "Ayush Kumar",
+  "license": "MIT"
+}

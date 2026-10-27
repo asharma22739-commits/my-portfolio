@@ -3,75 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio of Ayush Kumar - Aspiring Software Developer, Python & Web Enthusiast.">
   <title>Ayush Kumar | Portfolio</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="navbar">
+  <div id="glow"></div>
+  <div id="progress"></div>
+
+  <nav class="sticky-nav">
     <a href="#home" class="logo">Ayush Kumar</a>
-    <button id="menu-btn" aria-label="Menu">☰</button>
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#chatbot">Chat</a></li>
-    </ul>
-    <button id="theme-toggle" aria-label="Toggle theme">Theme</button>
+    <div id="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <a href="#chatbot">Chatbot</a>
+    </div>
+    <div class="nav-actions">
+      <button id="theme-toggle" aria-label="Toggle Theme">🌓</button>
+      <button id="menu-btn" aria-label="Toggle Menu">☰</button>
+    </div>
   </nav>
 
   <section id="home">
-    <img src="images/me.jpg" alt="Ayush Kumar">
-    <h1>Ayush Kumar</h1>
-    <p>Building Smart Solutions with Code and AI</p>
-    <a href="#projects">View Projects</a>
-    <a href="#contact">Contact Me</a>
+    <canvas id="bg-canvas"></canvas>
+    <div class="hero">
+      <img src="images/me.jpg" alt="Ayush Kumar" class="hero-avatar">
+      <h1>Ayush Kumar</h1>
+      <p class="tagline">Aspiring Software Developer | Python &amp; Web Enthusiast</p>
+      <p class="typed-line">I love building <span id="typed"></span><span class="caret">|</span></p>
+      <p class="intro">2nd year B.Tech student passionate about programming and AI-assisted development.</p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-secondary">Contact Me</a>
+      </div>
+    </div>
   </section>
 
-  <section id="about">
-    <h2>About</h2>
-    <p>Second-year B.Tech student at JECRC UNIVERSITY with a growing interest in software development. I turn ideas into working projects and keep improving my skills through hands-on practice.</p>
-    <p>Education: JECRC UNIVERSITY, B.Tech, 2nd year</p>
+  <div class="marquee">
+    <div id="track">
+      <span>Python</span>
+      <span>JavaScript</span>
+      <span>HTML5</span>
+      <span>CSS3</span>
+      <span>Git</span>
+      <span>GitHub</span>
+      <span>Cursor AI</span>
+      <span>Web Development</span>
+      <span>Three.js</span>
+      <span>AI Engineering</span>
+    </div>
+  </div>
+
+  <section id="about" class="reveal">
+    <div class="container">
+      <h2>About Me</h2>
+      <div class="about-content">
+        <div class="education-card">
+          <h3>Education</h3>
+          <p class="degree"><strong>Degree:</strong> Bachelor of Technology (B.Tech)</p>
+          <p class="year"><strong>Current Standing:</strong> 2nd Year</p>
+          <p class="desc">Pursuing undergraduate studies in engineering with a strong focus on core computer science, software design principles, and modern web technologies.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section id="skills">
-    <h2>Skills</h2>
-    <ul>
-      <li>Python</li>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JavaScript</li>
-      <li>Git</li>
-      <li>GitHub</li>
-      <li>Cursor AI</li>
-    </ul>
+  <section id="skills" class="reveal">
+    <div class="container">
+      <h2>Skills &amp; Technologies</h2>
+      <ul class="skills-list">
+        <li>Python</li>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Git</li>
+        <li>GitHub</li>
+        <li>Cursor AI</li>
+      </ul>
+    </div>
   </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <input id="search" type="search" placeholder="Search projects...">
-    <div id="project-list"></div>
+  <section id="projects" class="reveal">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="search-wrapper">
+        <input type="text" id="search" placeholder="Search projects by keyword or tech..." aria-label="Search projects">
+      </div>
+      <div id="project-list">
+        <!-- Projects populated dynamically or statically -->
+      </div>
+    </div>
   </section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:asharma22739@gmail.com">asharma22739@gmail.com</a></p>
-    <p>Phone: <a href="tel:9835443337">9835443337</a></p>
-    <p>GitHub: <a href="https://github.com/asharma22739-commits" target="_blank" rel="noopener">https://github.com/asharma22739-commits</a></p>
+  <section id="contact" class="reveal">
+    <div class="container">
+      <h2>Contact Me</h2>
+      <div class="contact-info">
+        <p>Email: <a href="mailto:asharma22739@gmail.com">asharma22739@gmail.com</a></p>
+        <p>Phone: <a href="tel:+919835443337">+91 9835443337</a></p>
+        <p>GitHub: <a href="https://github.com/asharma22739-commits" target="_blank" rel="noopener noreferrer">https://github.com/asharma22739-commits</a></p>
+      </div>
+    </div>
   </section>
 
-  <section id="chatbot">
-    <h2>Chatbot</h2>
-    <div id="chat-messages"></div>
-    <input id="chat-input" type="text" placeholder="Ask something...">
-    <button id="chat-send">Send</button>
+  <section id="chatbot" class="reveal">
+    <div class="container">
+      <h2>AI Assistant</h2>
+      <div class="chatbot-wrapper">
+        <div class="chatbot-controls">
+          <div class="chip-container">
+            <button class="chip" type="button">Who are you?</button>
+            <button class="chip" type="button">What are your skills?</button>
+            <button class="chip" type="button">What projects have you completed?</button>
+            <button class="chip" type="button">Where is your GitHub?</button>
+          </div>
+          <button id="chat-clear" class="btn-clear" type="button" aria-label="Clear Chat" title="Reset conversation history">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Clear</span>
+          </button>
+        </div>
+        <div id="chat-messages" role="log" aria-live="polite"></div>
+        <div class="chat-input-bar">
+          <textarea id="chat-input" rows="1" placeholder="Ask me something about Ayush... (Enter to send, Shift+Enter for new line)" aria-label="Chat message input"></textarea>
+          <button id="chat-send" type="button" aria-label="Send message">Send</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <footer>
-    <p>© 2026 Ayush Kumar</p>
+    <p>&copy; <span id="year"></span> Ayush Kumar. All rights reserved.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
