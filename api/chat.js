@@ -89,17 +89,24 @@ export default async function handler(req, res) {
     const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
     if (!apiKey) {
+      console.error('[API Configuration Error] Missing GROQ_API_KEY environment variable on server.');
       return res.status(500).json({
         error: 'AI service configuration is missing on the server. Please verify GROQ_API_KEY.',
         reply: 'AI assistant configuration is missing on the server. Please check the environment variables.'
       });
     }
 
-    // Parse body safely
+    // Parse body safely (handles object, string, or Buffer)
     let body = req.body;
     if (typeof body === 'string') {
       try {
         body = JSON.parse(body);
+      } catch {
+        body = {};
+      }
+    } else if (Buffer.isBuffer(body)) {
+      try {
+        body = JSON.parse(body.toString('utf8'));
       } catch {
         body = {};
       }
@@ -155,7 +162,7 @@ export default async function handler(req, res) {
       ...sanitizedHistory
     ];
 
-    // Timeout protection for serverless runtime (25s limit aligned with vercel.json maxDuration)
+    // Timeout protection for serverless runtime (20s timeout before Vercel gateway timeout)
     const groqResponse = await fetch(GROQ_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -168,11 +175,14 @@ export default async function handler(req, res) {
         max_tokens: 1500,
         temperature: 0.5
       }),
-      signal: AbortSignal.timeout(25000)
+      signal: AbortSignal.timeout(20000)
     });
 
     if (!groqResponse.ok) {
       const status = groqResponse.status;
+      const errorText = await groqResponse.text().catch(() => '');
+      console.error(`[Groq Provider Error] HTTP ${status}:`, errorText.slice(0, 400));
+
       if (status === 429) {
         return res.status(429).json({
           error: 'Rate limit reached. Please wait a few moments before sending another message.',
@@ -180,14 +190,13 @@ export default async function handler(req, res) {
         });
       }
       if (status === 401 || status === 403) {
-        console.error('Groq authentication failure with status:', status);
+        console.error('[Groq Auth Error] Groq authentication failed. Please verify GROQ_API_KEY.');
         return res.status(500).json({
           error: 'AI service authentication failed. Please check server configuration.',
           reply: 'AI service authentication failed. Please check server configuration.'
         });
       }
 
-      console.error('Groq API error status:', status);
       return res.status(502).json({
         error: 'Unable to get a response from the AI assistant. Please try again later.',
         reply: 'Unable to get a response from the AI assistant. Please try again later.'

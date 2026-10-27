@@ -1,17 +1,10 @@
 {
-  "version": 2,
   "cleanUrls": true,
   "functions": {
     "api/chat.js": {
       "maxDuration": 30
     }
   },
-  "rewrites": [
-    {
-      "source": "/api/chat",
-      "destination": "/api/chat.js"
-    }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
@@ -23,3 +16,4 @@
     }
   ]
 }
+

@@ -68,6 +68,7 @@ const server = http.createServer(async (req, res) => {
       let statusCode = 200;
       res.status = (code) => {
         statusCode = code;
+        res.statusCode = code;
         return res;
       };
 

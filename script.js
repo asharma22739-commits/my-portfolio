@@ -500,11 +500,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Record turn in session conversation history
     conversationHistory.push({ role: 'user', content: text });
 
+    function getChatEndpoint() {
+      // If frontend is opened via VS Code Live Server (typically port 5500, 5501, etc.)
+      // or file:// protocol, route to the local development server at http://localhost:3000/api/chat
+      const isStaticServer = (
+        window.location.protocol === 'file:' ||
+        (window.location.hostname === '127.0.0.1' && window.location.port !== '3000') ||
+        (window.location.hostname === 'localhost' && window.location.port !== '3000' && window.location.port !== '')
+      );
+      if (isStaticServer) {
+        return 'http://localhost:3000/api/chat';
+      }
+      // Same-origin for Vercel production and local dev server (port 3000)
+      return '/api/chat';
+    }
+
     // Show pulsing typing indicator
     const typingBubble = createTypingIndicator();
+    const endpoint = getChatEndpoint();
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -516,10 +532,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json().catch(() => null);
 
       if (!res.ok) {
-        const errorMsg = data?.error || 'Unable to connect to the AI assistant right now. Please try again.';
+        const errorDetail = data?.error || data?.reply || `HTTP ${res.status}`;
+        console.error(`[AI Chatbot Error] ${endpoint} responded with status ${res.status}:`, errorDetail);
+
+        let userMsg = data?.reply || data?.error;
+        if (!userMsg) {
+          if (res.status === 404) {
+            userMsg = 'AI service endpoint not found (404). Please ensure the backend function is deployed.';
+          } else {
+            userMsg = 'Unable to connect to the AI assistant right now. Please try again.';
+          }
+        }
+
         if (typingBubble) {
           typingBubble.className = 'msg bot msg-error';
-          typingBubble.textContent = errorMsg;
+          typingBubble.textContent = userMsg;
         }
         // Roll back the last user message from history on error
         conversationHistory.pop();
@@ -532,9 +559,14 @@ document.addEventListener('DOMContentLoaded', () => {
         conversationHistory.push({ role: 'assistant', content: reply });
       }
     } catch (err) {
+      console.error(`[AI Chatbot Network Error] Failed to fetch ${endpoint}:`, err?.message || err);
+      let networkMsg = 'Network error: Please check your connection and try again.';
+      if (endpoint.startsWith('http://localhost:3000')) {
+        networkMsg = 'Cannot connect to local backend (http://localhost:3000). When using Live Server, start the dev server with: npm run dev';
+      }
       if (typingBubble) {
         typingBubble.className = 'msg bot msg-error';
-        typingBubble.textContent = 'Network error: Please check your connection and try again.';
+        typingBubble.textContent = networkMsg;
       }
       conversationHistory.pop();
     } finally {
